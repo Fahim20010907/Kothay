@@ -38,7 +38,6 @@ async function run() {
         app.locals.users = usersCollection;
         app.locals.reviews = reviewsCollection;
 
-        await client.db("admin").command({ ping: 1 });
         console.log("Connected to MongoDB!");
 
     } catch (error) {
@@ -69,6 +68,12 @@ app.get('/', (req, res) => {
     res.send('Kothay API is running');
 })
 
-app.listen(port, () => {
-    console.log(`Kothay Server is running on port ${port}`);
-})
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(port, () => {
+        console.log(`Kothay Server is running on port ${port}`);
+    });
+}
+
+// For Vercel deployment - THIS IS CRITICAL
+module.exports = app;
