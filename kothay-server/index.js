@@ -21,59 +21,75 @@ const client = new MongoClient(uri, {
     }
 });
 
-async function run() {
-    try {
-        await client.connect();
+// Make the client accessible
+app.locals.client = client;
 
-        const db = client.db("kothay");
-        const marketsCollection = db.collection("markets");
-        const streetFoodCollection = db.collection("streetFood");
-        const usersCollection = db.collection("users");
-        const reviewsCollection = db.collection("reviews");
+// Database connection flag
+let isDbConnected = false;
 
-        // Make collections available to routes
-        app.locals.db = db;
-        app.locals.markets = marketsCollection;
-        app.locals.streetFood = streetFoodCollection;
-        app.locals.users = usersCollection;
-        app.locals.reviews = reviewsCollection;
-
-        console.log("Connected to MongoDB!");
-
-    } catch (error) {
-        console.error("Database connection error:", error);
-    }
-}
-run();
-
-// Routes
+// Route handlers
 const marketsRoutes = require('./routes/markets');
 const streetFoodRoutes = require('./routes/street-food');
 const reviewsRoutes = require('./routes/reviews');
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
 
-// Apply checkBlocked middleware to protected routes
-app.use('/api/street-food', checkBlocked);
-app.use('/api/markets', checkBlocked);
-app.use('/api/reviews', checkBlocked);
-app.use('/api/users/watchlist', watchlistRoutes);
-app.use('/api/markets', marketsRoutes);
-app.use('/api/street-food', streetFoodRoutes);
-app.use('/api/reviews', reviewsRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/admin', adminRoutes);
+// Apply routes AFTER database is connected
+const applyRoutes = () => {
+    app.use('/api/street-food', checkBlocked);
+    app.use('/api/markets', checkBlocked);
+    app.use('/api/reviews', checkBlocked);
+    app.use('/api/users/watchlist', watchlistRoutes);
+    app.use('/api/markets', marketsRoutes);
+    app.use('/api/street-food', streetFoodRoutes);
+    app.use('/api/reviews', reviewsRoutes);
+    app.use('/api/auth', authRoutes);
+    app.use('/api/admin', adminRoutes);
 
-app.get('/', (req, res) => {
-    res.send('Kothay API is running');
-})
+    app.get('/', (req, res) => {
+        res.send('Kothay API is running');
+    });
+};
+
+// Connect to MongoDB
+async function connectDB() {
+    try {
+        await client.connect();
+        console.log("Connected to MongoDB!");
+
+        const db = client.db("kothay");
+        app.locals.db = db;
+        app.locals.markets = db.collection("markets");
+        app.locals.streetFood = db.collection("streetFood");
+        app.locals.users = db.collection("users");
+        app.locals.reviews = db.collection("reviews");
+
+        isDbConnected = true;
+
+        // Apply routes only after DB is connected
+        applyRoutes();
+
+    } catch (error) {
+        console.error("Database connection error:", error);
+    }
+}
 
 // For local development
 if (process.env.NODE_ENV !== 'production') {
-    app.listen(port, () => {
-        console.log(`Kothay Server is running on port ${port}`);
+    connectDB().then(() => {
+        app.listen(port, () => {
+            console.log(`Kothay Server is running on port ${port}`);
+        });
     });
 }
 
-// For Vercel deployment - THIS IS CRITICAL
-module.exports = app;
+// For Vercel serverless - ensure DB is connected before handling requests
+const handler = async (req, res) => {
+    if (!isDbConnected) {
+        await connectDB();
+    }
+    return app(req, res);
+};
+
+// For Vercel deployment
+module.exports = handler;
