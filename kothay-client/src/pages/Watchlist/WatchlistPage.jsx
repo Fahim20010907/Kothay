@@ -6,6 +6,9 @@ import Swal from 'sweetalert2';
 import WatchlistNote from './WatchlistNote';
 import ReminderModal from './ReminderModal';
 
+// Add your backend URL here
+const API_BASE_URL = 'https://kothay-server001.vercel.app/api';
+
 const WatchlistPage = () => {
     const [watchlist, setWatchlist] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -20,7 +23,7 @@ const WatchlistPage = () => {
         setLoading(true);
         try {
             const token = localStorage.getItem('kothay_token');
-            const response = await fetch('https://your-backend-url.vercel.app/api/users/watchlist', {
+            const response = await fetch(`${API_BASE_URL}/users/watchlist`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const data = await response.json();
@@ -47,7 +50,7 @@ const WatchlistPage = () => {
         if (result.isConfirmed) {
             try {
                 const token = localStorage.getItem('kothay_token');
-                await fetch(`http://localhost:3000/api/users/watchlist/${vendorId}`, {
+                await fetch(`${API_BASE_URL}/users/watchlist/${vendorId}`, {
                     method: 'DELETE',
                     headers: { Authorization: `Bearer ${token}` }
                 });
@@ -62,7 +65,7 @@ const WatchlistPage = () => {
     const handleUpdateNote = async (vendorId, note) => {
         try {
             const token = localStorage.getItem('kothay_token');
-            await fetch(`http://localhost:3000/api/users/watchlist/${vendorId}/note`, {
+            await fetch(`${API_BASE_URL}/users/watchlist/${vendorId}/note`, {
                 method: 'PATCH',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -79,7 +82,7 @@ const WatchlistPage = () => {
     const handleSetReminder = async (vendorId, reminderDate) => {
         try {
             const token = localStorage.getItem('kothay_token');
-            await fetch(`http://localhost:3000/api/users/watchlist/${vendorId}/reminder`, {
+            await fetch(`${API_BASE_URL}/users/watchlist/${vendorId}/reminder`, {
                 method: 'PATCH',
                 headers: {
                     'Authorization': `Bearer ${token}`,
