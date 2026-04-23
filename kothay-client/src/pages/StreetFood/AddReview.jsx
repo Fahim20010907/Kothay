@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FiArrowLeft, FiStar, FiCheck, FiAlertCircle } from 'react-icons/fi';
 import axios from 'axios';
+import useAuth from '../../hooks/useAuth';
 
 // Add your backend URL here
 const API_BASE_URL = 'https://kothay-server001.vercel.app/api';
@@ -10,12 +11,15 @@ const API_BASE_URL = 'https://kothay-server001.vercel.app/api';
 const AddReview = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { user } = useAuth(); // Get logged-in user info
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState('');
 
+    // Get user display name
+    const userDisplayName = user?.fullName || user?.name || user?.email?.split('@')[0] || 'Anonymous User';
+
     const [formData, setFormData] = useState({
-        userName: '',
         rating: 5,
         comment: ''
     });
@@ -31,7 +35,14 @@ const AddReview = () => {
         setError('');
 
         try {
-            const response = await axios.post(`${API_BASE_URL}/reviews/street-food/${id}`, formData);
+            // Use logged-in user's name automatically
+            const reviewData = {
+                userName: userDisplayName,
+                rating: formData.rating,
+                comment: formData.comment
+            };
+
+            const response = await axios.post(`${API_BASE_URL}/reviews/street-food/${id}`, reviewData);
 
             if (response.data.success) {
                 setSuccess(true);
@@ -87,20 +98,15 @@ const AddReview = () => {
 
                     <form onSubmit={handleSubmit} className="p-6 space-y-6">
 
-                        {/* User Name */}
+                        {/* User Name Display (Read-only) */}
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Your Name
+                                Reviewing as
                             </label>
-                            <input
-                                type="text"
-                                name="userName"
-                                value={formData.userName}
-                                onChange={handleChange}
-                                placeholder="e.g., Rakib Hasan"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                            />
-                            <p className="text-xs text-gray-500 mt-1">Optional - leave blank to stay anonymous</p>
+                            <div className="w-full px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-700">
+                                {userDisplayName}
+                            </div>
+                            <p className="text-xs text-gray-500 mt-1">Your name will be shown with this review</p>
                         </div>
 
                         {/* Rating Stars */}
