@@ -5,6 +5,9 @@ import { FiArrowLeft, FiUpload, FiCheck, FiAlertCircle } from 'react-icons/fi';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
+// Add your backend URL here
+const API_BASE_URL = 'https://kothay-server001.vercel.app/api';
+
 const AddFoodSpot = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
@@ -98,7 +101,7 @@ const AddFoodSpot = () => {
                 createdAt: new Date().toISOString()
             };
 
-            const response = await axios.post('http://localhost:3000/api/street-food', newStall);
+            const response = await axios.post(`${API_BASE_URL}/street-food`, newStall);
 
             if (response.data.success) {
                 Swal.fire({

@@ -1,7 +1,11 @@
+// src/pages/StreetFood/AddReview.jsx
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FiArrowLeft, FiStar, FiCheck, FiAlertCircle } from 'react-icons/fi';
 import axios from 'axios';
+
+// Add your backend URL here
+const API_BASE_URL = 'https://kothay-server001.vercel.app/api';
 
 const AddReview = () => {
     const { id } = useParams();
@@ -27,7 +31,7 @@ const AddReview = () => {
         setError('');
 
         try {
-            const response = await axios.post(`http://localhost:3000/api/reviews/street-food/${id}`, formData);
+            const response = await axios.post(`${API_BASE_URL}/reviews/street-food/${id}`, formData);
 
             if (response.data.success) {
                 setSuccess(true);
@@ -111,8 +115,8 @@ const AddReview = () => {
                                         type="button"
                                         onClick={() => setFormData(prev => ({ ...prev, rating: star }))}
                                         className={`text-4xl transition-all duration-300 ${formData.rating >= star
-                                                ? 'text-amber-400'
-                                                : 'text-gray-300 hover:text-amber-200'
+                                            ? 'text-amber-400'
+                                            : 'text-gray-300 hover:text-amber-200'
                                             }`}
                                     >
                                         ★
