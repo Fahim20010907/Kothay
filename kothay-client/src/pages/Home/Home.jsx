@@ -138,8 +138,8 @@ const Home = () => {
                             Real prices, real reviews, real insights. Discover markets, compare prices, and explore street food spots.
                         </p>
 
-                        <div className="flex flex-wrap justify-center gap-3 text-sm text-gray-300">
-                            <span className="bg-teal-700/50 backdrop-blur-sm px-3 py-1 rounded-full">Popular: </span>
+                        <div className="flex flex-wrap justify-center gap-3 text-lg text-gray-300">
+                            <span className="bg-teal-900/50 backdrop-blur-sm px-3 py-1 rounded-full">Popular </span>
                             <button className="hover:text-amber-400 transition">Electronics</button>
                             <span>•</span>
                             <button className="hover:text-amber-400 transition">Clothing</button>
