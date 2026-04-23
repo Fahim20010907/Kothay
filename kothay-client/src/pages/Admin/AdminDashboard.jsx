@@ -7,6 +7,9 @@ import {
 } from 'react-icons/fi';
 import Swal from 'sweetalert2';
 
+// Add your backend URL here
+const API_BASE_URL = 'https://kothay-server001.vercel.app/api';
+
 const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('foodSpots');
     const [foodSpots, setFoodSpots] = useState([]);
@@ -27,16 +30,16 @@ const AdminDashboard = () => {
             const headers = { Authorization: `Bearer ${token}` };
 
             if (activeTab === 'foodSpots') {
-                const res = await axios.get('http://localhost:3000/api/admin/street-food', { headers });
+                const res = await axios.get(`${API_BASE_URL}/admin/street-food`, { headers });
                 setFoodSpots(res.data.data);
             } else if (activeTab === 'markets') {
-                const res = await axios.get('http://localhost:3000/api/admin/markets', { headers });
+                const res = await axios.get(`${API_BASE_URL}/admin/markets`, { headers });
                 setMarkets(res.data.data);
             } else if (activeTab === 'reviews') {
-                const res = await axios.get('http://localhost:3000/api/admin/reviews', { headers });
+                const res = await axios.get(`${API_BASE_URL}/admin/reviews`, { headers });
                 setReviews(res.data.data);
             } else if (activeTab === 'users') {
-                const res = await axios.get('http://localhost:3000/api/admin/users', { headers });
+                const res = await axios.get(`${API_BASE_URL}/admin/users`, { headers });
                 setUsers(res.data.data);
             }
         } catch (error) {
@@ -51,7 +54,7 @@ const AdminDashboard = () => {
     const handleVerifyFoodSpot = async (id, verified) => {
         try {
             const token = localStorage.getItem('kothay_token');
-            await axios.patch(`http://localhost:3000/api/admin/street-food/${id}/verify`,
+            await axios.patch(`${API_BASE_URL}/admin/street-food/${id}/verify`,
                 { verified },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -75,7 +78,7 @@ const AdminDashboard = () => {
         if (result.isConfirmed) {
             try {
                 const token = localStorage.getItem('kothay_token');
-                await axios.delete(`http://localhost:3000/api/admin/street-food/${id}`, {
+                await axios.delete(`${API_BASE_URL}/admin/street-food/${id}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 Swal.fire('Deleted!', 'Food spot has been deleted.', 'success');
@@ -100,7 +103,7 @@ const AdminDashboard = () => {
         if (result.isConfirmed) {
             try {
                 const token = localStorage.getItem('kothay_token');
-                await axios.delete(`http://localhost:3000/api/admin/markets/${id}`, {
+                await axios.delete(`${API_BASE_URL}/admin/markets/${id}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 Swal.fire('Deleted!', 'Market has been deleted.', 'success');
@@ -125,7 +128,7 @@ const AdminDashboard = () => {
         if (result.isConfirmed) {
             try {
                 const token = localStorage.getItem('kothay_token');
-                await axios.delete(`http://localhost:3000/api/admin/reviews/${id}`, {
+                await axios.delete(`${API_BASE_URL}/admin/reviews/${id}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 Swal.fire('Deleted!', 'Review has been deleted.', 'success');
@@ -151,7 +154,7 @@ const AdminDashboard = () => {
         if (result.isConfirmed) {
             try {
                 const token = localStorage.getItem('kothay_token');
-                await axios.patch(`http://localhost:3000/api/admin/users/${userId}/block`,
+                await axios.patch(`${API_BASE_URL}/admin/users/${userId}/block`,
                     { isBlocked: !isBlocked },
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
@@ -188,8 +191,8 @@ const AdminDashboard = () => {
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
                                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ${activeTab === tab.id
-                                        ? 'bg-teal-600 text-white shadow-md'
-                                        : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+                                    ? 'bg-teal-600 text-white shadow-md'
+                                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
                                     }`}
                             >
                                 <Icon className="text-lg" />
