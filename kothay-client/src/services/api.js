@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://kothay-backend.vercel.app/api';
+const API_BASE_URL = 'https://kothay-xg8g.vercel.app/api/auth';
 
 const api = axios.create({
     baseURL: API_BASE_URL,
