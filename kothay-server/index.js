@@ -10,7 +10,7 @@ const watchlistRoutes = require('./routes/watchlist');
 // Middleware
 app.use(express.json());
 app.use(cors({
-    origin: ['https://kothay-client.vercel.app', 'http://localhost:5173'],
+    origin: '*',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
