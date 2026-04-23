@@ -138,22 +138,6 @@ const Home = () => {
                             Real prices, real reviews, real insights. Discover markets, compare prices, and explore street food spots.
                         </p>
 
-                        <div className="max-w-2xl mx-auto mb-6">
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    placeholder="Search markets, products, or street food..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full bg-white text-gray-900 rounded-full py-4 pl-12 pr-24 shadow-xl focus:outline-none focus:ring-2 focus:ring-amber-400"
-                                />
-                                <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
-                                <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-amber-500 hover:bg-amber-600 text-gray-900 font-semibold px-6 py-2 rounded-full transition-all duration-300">
-                                    Search
-                                </button>
-                            </div>
-                        </div>
-
                         <div className="flex flex-wrap justify-center gap-3 text-sm text-gray-300">
                             <span className="bg-teal-700/50 backdrop-blur-sm px-3 py-1 rounded-full">Popular: </span>
                             <button className="hover:text-amber-400 transition">Electronics</button>
