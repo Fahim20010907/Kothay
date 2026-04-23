@@ -20,7 +20,7 @@ const WatchlistPage = () => {
         setLoading(true);
         try {
             const token = localStorage.getItem('kothay_token');
-            const response = await fetch('http://localhost:3000/api/users/watchlist', {
+            const response = await fetch('https://your-backend-url.vercel.app/api/users/watchlist', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const data = await response.json();
