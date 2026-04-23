@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export const AuthContext = createContext(null);
 
-const API_URL = 'https://kothay-backend.vercel.app/api';
+const API_URL = 'https://kothay-server001.vercel.app/api/auth';
 
 // Admin email - hardcoded
 const ADMIN_EMAIL = 'almahfuz0179@gmail.com';
